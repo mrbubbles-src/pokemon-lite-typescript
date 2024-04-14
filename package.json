@@ -1,0 +1,31 @@
+{
+    "name": "pokemon-lite-typescript",
+    "version": "1.0.0",
+    "description": "Redid my old PB Project but with TypeScript after taking a TS course",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon dist/index.js",
+        "tsCompile": "tsc -w"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mrbubbles-src/pokemon-lite-typescript.git"
+    },
+    "keywords": [
+        "pokemon",
+        "lite",
+        "pkmn",
+        "typescript",
+        "typeScript",
+        "TypeScript",
+        "ts",
+        "TS"
+    ],
+    "author": "Manuel Fahrenholz",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/mrbubbles-src/pokemon-lite-typescript/issues"
+    },
+    "homepage": "https://github.com/mrbubbles-src/pokemon-lite-typescript#readme"
+}
