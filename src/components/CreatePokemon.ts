@@ -100,23 +100,23 @@ export class Pokemon implements PokemonInterface, AttackerPokemonInterface {
     }
 }
 
-const pikachu = new Pokemon("Pikachu", 250, 100);
-const glumanda = new Pokemon("Glumanda", 200, 100);
+// const pikachu = new Pokemon("Pikachu", 250, 100);
+// const glumanda = new Pokemon("Glumanda", 200, 100);
 
-const thunder = new CreateAttackSkill("Thunder", 10, 5);
-const fire = new CreateAttackSkill("Fire", 12, 7);
+// const thunder = new CreateAttackSkill("Thunder", 10, 5);
+// const fire = new CreateAttackSkill("Fire", 12, 7);
 
-pikachu.learnAttackSkill(thunder);
-glumanda.learnAttackSkill(fire);
-console.log(pikachu.showStatus());
-console.log("---");
-console.log(glumanda.showStatus());
-console.log("---");
+// pikachu.learnAttackSkill(thunder);
+// glumanda.learnAttackSkill(fire);
+// console.log(pikachu.showStatus());
+// console.log("---");
+// console.log(glumanda.showStatus());
+// console.log("---");
 
-console.log(pikachu.attack(0, glumanda));
-console.log("---");
+// console.log(pikachu.attack(0, glumanda));
+// console.log("---");
 
-console.log(pikachu.showStatus());
-console.log("---");
+// console.log(pikachu.showStatus());
+// console.log("---");
 
-console.log(glumanda.showStatus());
+// console.log(glumanda.showStatus());
