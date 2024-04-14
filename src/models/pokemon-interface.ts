@@ -10,21 +10,10 @@ export interface AttackerPokemonInterface {
 export interface PokemonInterface {
     showStatus(): string;
     learnAttackSkill(skill: AttackSkillInterface): string;
-    attack(skillIndex: number, attackedPokemon: AttackerPokemonInterface): void;
+    attack(
+        skillIndex: number,
+        attackedPokemon: AttackerPokemonInterface
+    ): string;
     healthPotion(): string;
     magicPotion(): string;
-    performAttack(
-        skillName: AttackSkillInterface,
-        attackedPokemon: AttackerPokemonInterface
-    ): string;
-    hasEnoughMagic(skill: AttackSkillInterface): boolean;
-    insufficientMagicMessage(skill: AttackSkillInterface): string;
-    attackSuccessMessage(
-        skill: AttackSkillInterface,
-        attackedPokemon: AttackerPokemonInterface
-    ): string;
-    attackMessage(
-        skill: AttackSkillInterface,
-        attackedPokemon: AttackerPokemonInterface
-    ): string;
 }
