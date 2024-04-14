@@ -3,7 +3,7 @@ import {
     PokemonInterface,
     AttackerPokemonInterface,
 } from "../models/pokemon-interface.js";
-import { CreateAttackSkill } from "./CreateAttackSkill.js";
+// import { CreateAttackSkill } from "./CreateAttackSkill.js";
 export class Pokemon implements PokemonInterface, AttackerPokemonInterface {
     maxHealth: number;
     maxMagic: number;
