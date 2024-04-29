@@ -1,13 +1,31 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vite + TS</title>
+    </head>
+    <body>
+        <main id="app">
+            <div class="fake-terminal">ich werde mal ein fake terminal :E</div>
+            <section class="pokedex-container">
+                <div class="pokedex-left-panel">
+                    <div class="pokedex-left-panel-nav"></div>
+                    <div class="pokedex-left-panel-pkmn-list-container">
+                        <ul class="pokedex-left-panel-pkmn-list"></ul>
+                    </div>
+
+                    <div class="pokedex-left-panelt-buttons"></div>
+                </div>
+                <div class="pokedex-right-panel">
+                    <div class="pokedex-right-panel-nav"></div>
+                    <div class="pokedex-right-panel-image-container"></div>
+                    <div class="pokedex-right-panel-info"></div>
+                </div>
+            </section>
+        </main>
+
+        <script type="module" src="/src/main.ts"></script>
+    </body>
 </html>
