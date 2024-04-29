@@ -1,6 +1,6 @@
 import { NamedAPIResourceList, PokemonClient } from "pokenode-ts";
 
-export default async function getPokemon(): Promise<
+export default async function getPokemonList(): Promise<
     NamedAPIResourceList | undefined
 > {
     const api = new PokemonClient();

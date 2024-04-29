@@ -1,6 +1,6 @@
 import { MoveClient, NamedAPIResourceList } from "pokenode-ts";
 
-export default async function getAbilities(): Promise<
+export default async function getAbilityList(): Promise<
     NamedAPIResourceList | undefined
 > {
     const api = new MoveClient();
