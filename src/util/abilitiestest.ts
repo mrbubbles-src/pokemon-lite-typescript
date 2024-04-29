@@ -1,10 +1,16 @@
-import { MoveClient } from "pokenode-ts";
+import { MoveClient, NamedAPIResourceList } from "pokenode-ts";
 
-(async () => {
+export default async function getAbilities(): Promise<
+    NamedAPIResourceList | undefined
+> {
     const api = new MoveClient();
 
-    await api
-        .listMoves(0, 934)
-        .then((data) => console.log(data))
-        .catch((error) => console.error(error));
-})();
+    try {
+        const data = await api.listMoves(0, 934);
+        return data;
+    } catch (error) {
+        console.error(error);
+    }
+
+    return undefined;
+}

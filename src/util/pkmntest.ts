@@ -1,10 +1,16 @@
-import { PokemonClient } from "pokenode-ts";
+import { NamedAPIResourceList, PokemonClient } from "pokenode-ts";
 
-(async () => {
+export default async function getPokemon(): Promise<
+    NamedAPIResourceList | undefined
+> {
     const api = new PokemonClient();
 
-    await api
-        .listPokemons(0, 1025)
-        .then((data) => console.log(data))
-        .catch((error) => console.error(error));
-})();
+    try {
+        const data = await api.listPokemons(0, 1025);
+        return data;
+    } catch (error) {
+        console.error(error);
+    }
+
+    return undefined;
+}
