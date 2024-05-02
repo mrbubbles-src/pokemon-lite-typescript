@@ -6,7 +6,8 @@ export default async function getAbilityList(): Promise<
     const api = new MoveClient();
 
     try {
-        const data = await api.listMoves(0, 934);
+        const data = await api.listMoves(0, 937);
+        console.log(data);
         return data;
     } catch (error) {
         console.error(error);
