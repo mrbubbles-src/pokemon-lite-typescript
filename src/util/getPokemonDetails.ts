@@ -1,5 +1,6 @@
 import axios from "axios";
-
+import getPokemonList from "./getPokemonList";
+import { NamedAPIResourceList } from "pokenode-ts";
 interface IPkmnAttributes {
     hp: number;
     attack: number;
@@ -11,7 +12,7 @@ interface IPokemon {
     attributes: IPkmnAttributes;
 }
 
-export default async function getPokemonDetails(
+async function getPokemonDetails(
     pkmnName: string,
     pkmnUrl: string
 ): Promise<{} | undefined> {
@@ -35,4 +36,39 @@ export default async function getPokemonDetails(
         console.error(error);
     }
     return undefined;
+}
+// import getAbilityList from "./util/getAbilityList";
+
+export default async function getPokemon() {
+    let pokemonDetailsList: ({} | undefined)[];
+    const sessionStoragePkmnList: string | null =
+        sessionStorage.getItem("pokemonDetails");
+
+    if (sessionStoragePkmnList !== null) {
+        pokemonDetailsList = JSON.parse(sessionStoragePkmnList);
+        console.log("data from session storage", pokemonDetailsList);
+    } else {
+        const pokemonList: NamedAPIResourceList | undefined =
+            await getPokemonList();
+        console.log(pokemonList);
+        if (pokemonList === undefined) {
+            throw new Error("Pokemon could not be found.");
+        }
+        const pokemonDetailsPromises = pokemonList.results.map(
+            async (pokemon) => {
+                let pokeName = pokemon.name;
+                let pokeUrl = pokemon.url;
+
+                const pkmn = await getPokemonDetails(pokeName, pokeUrl);
+                return pkmn;
+            }
+        );
+        pokemonDetailsList = await Promise.all(pokemonDetailsPromises);
+        console.log("data from fetch", pokemonDetailsList);
+        sessionStorage.setItem(
+            "pokemonDetails",
+            JSON.stringify(pokemonDetailsList)
+        );
+    }
+    return pokemonDetailsList;
 }
