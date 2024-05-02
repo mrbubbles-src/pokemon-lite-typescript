@@ -1,6 +1,5 @@
 import axios from "axios";
 import getPokemonList from "./getPokemonList";
-import { NamedAPIResourceList } from "pokenode-ts";
 interface IPkmnAttributes {
     hp: number;
     attack: number;
@@ -48,8 +47,7 @@ export default async function getPokemon() {
         pokemonDetailsList = JSON.parse(sessionStoragePkmnList);
         console.log("data from session storage", pokemonDetailsList);
     } else {
-        const pokemonList: NamedAPIResourceList | undefined =
-            await getPokemonList();
+        const pokemonList = await getPokemonList();
         console.log(pokemonList);
         if (pokemonList === undefined) {
             throw new Error("Pokemon could not be found.");
