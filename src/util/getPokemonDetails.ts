@@ -37,7 +37,8 @@ async function fetchPokemonDetails(pokemon: { name: string; url: string }) {
         img: data.sprites.front_default,
         level: 100,
         types: data.types.map(
-            (type: { type: { name: string } }) => type.type.name
+            (type: { type: { name: string } }) =>
+                type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)
         ),
         attributes: pkmnAttributes,
         url: pokemon.url,
