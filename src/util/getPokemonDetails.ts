@@ -9,6 +9,7 @@ interface IPokemon {
     id: number;
     name: string;
     img: string;
+    level: number;
     attributes: IPkmnAttributes;
     url: string;
 }
@@ -24,13 +25,14 @@ async function getPokemonDetails(
         const pkmnAttributes: IPkmnAttributes = {
             // max possible HP and Attack based off of this https://pokemondb.net/pokebase/6506/there-formula-for-working-pokemons-highest-possible-stats#:~:text=Yes%2C%20there%20is%20a%20formula%2C%20which%20is%20not,1.1%20with%2010%20instead%20of%205%20for%20HP.
             hp: Math.round(data.stats[0].base_stat * 2 + 204),
-            attack: Math.round((data.stats[0].base_stat * 2 + 99) * 1.1),
+            attack: Math.round((data.stats[1].base_stat * 2 + 99) * 1.1),
             type: data.types[0].type.name,
         };
         const pokemon: IPokemon = {
             id: data.id,
             name: pokemonName,
             img: data.sprites.front_default,
+            level: 100,
             attributes: { ...pkmnAttributes },
             url: pkmnUrl,
         };
@@ -38,7 +40,6 @@ async function getPokemonDetails(
     } catch (error) {
         console.error(error);
     }
-    return undefined;
 }
 export default async function getPokemon() {
     let pokemonDetailsList: ({} | undefined)[];
