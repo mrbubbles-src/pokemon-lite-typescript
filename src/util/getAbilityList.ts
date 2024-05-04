@@ -79,7 +79,7 @@ export default async function getAbilityList(): Promise<
         "struggle",
     ];
     try {
-        const data = await api.listMoves(0, 937);
+        const data = await api.listMoves(0, 165);
         const filteredData = {
             count: data.count,
             next: data.next,
