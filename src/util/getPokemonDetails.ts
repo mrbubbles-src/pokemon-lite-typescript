@@ -1,75 +1,75 @@
 import axios from "axios";
 import getPokemonList from "./getPokemonList";
+
 interface IPkmnAttributes {
     hp: number;
     attack: number;
-    type: string;
+    defense: number;
+    specialAttack: number;
+    specialDefense: number;
+    speed: number;
 }
+
 interface IPokemon {
     id: number;
     name: string;
     img: string;
     level: number;
+    types: string;
     attributes: IPkmnAttributes;
     url: string;
 }
 
-async function getPokemonDetails(
-    pkmnName: string,
-    pkmnUrl: string
-): Promise<{} | undefined> {
-    const pokemonName = pkmnName.charAt(0).toUpperCase() + pkmnName.slice(1);
-    try {
-        const response = await axios.get(pkmnUrl);
-        const data = response.data;
-        const pkmnAttributes: IPkmnAttributes = {
-            // max possible HP and Attack based off of this https://pokemondb.net/pokebase/6506/there-formula-for-working-pokemons-highest-possible-stats#:~:text=Yes%2C%20there%20is%20a%20formula%2C%20which%20is%20not,1.1%20with%2010%20instead%20of%205%20for%20HP.
-            hp: Math.round(data.stats[0].base_stat * 2 + 204),
-            attack: Math.round((data.stats[1].base_stat * 2 + 99) * 1.1),
-            type: data.types[0].type.name,
-        };
-        const pokemon: IPokemon = {
-            id: data.id,
-            name: pokemonName,
-            img: data.sprites.front_default,
-            level: 100,
-            attributes: { ...pkmnAttributes },
-            url: pkmnUrl,
-        };
-        return pokemon;
-    } catch (error) {
-        console.error(error);
-    }
+async function fetchPokemonDetails(pokemon: { name: string; url: string }) {
+    const response = await axios.get(pokemon.url);
+    const data = response.data;
+    const pkmnAttributes: IPkmnAttributes = {
+        hp: Math.round(data.stats[0].base_stat * 2 + 204),
+        attack: Math.round((data.stats[1].base_stat * 2 + 99) * 1.1),
+        defense: Math.round((data.stats[2].base_stat * 2 + 99) * 1.1),
+        specialAttack: Math.round((data.stats[3].base_stat * 2 + 99) * 1.1),
+        specialDefense: Math.round((data.stats[4].base_stat * 2 + 99) * 1.1),
+        speed: Math.round((data.stats[5].base_stat * 2 + 99) * 1.1),
+    };
+    return {
+        id: data.id,
+        name: pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1),
+        img: data.sprites.front_default,
+        level: 100,
+        types: data.types.map(
+            (type: { type: { name: string } }) => type.type.name
+        ),
+        attributes: pkmnAttributes,
+        url: pokemon.url,
+    };
 }
+
+async function getPokemonDetails() {
+    const pokemonList = await getPokemonList();
+    if (!pokemonList) {
+        throw new Error("Failed to fetch Pokemon list");
+    }
+    const pokemonDetailsPromises = pokemonList.results.map(fetchPokemonDetails);
+    return await Promise.all(pokemonDetailsPromises);
+}
+
 export default async function getPokemon() {
-    let pokemonDetailsList: ({} | undefined)[];
+    let pokemonDetailsList: IPokemon[] | undefined;
     const sessionStoragePkmnList: string | null =
         sessionStorage.getItem("pokemonDetails");
 
     if (sessionStoragePkmnList !== null) {
         pokemonDetailsList = JSON.parse(sessionStoragePkmnList);
-        console.log("data from session storage", pokemonDetailsList);
     } else {
-        const pokemonList = await getPokemonList();
-        console.log(pokemonList);
-        if (pokemonList === undefined) {
-            throw new Error("Pokemon could not be found.");
+        try {
+            pokemonDetailsList = await getPokemonDetails();
+            sessionStorage.setItem(
+                "pokemonDetails",
+                JSON.stringify(pokemonDetailsList)
+            );
+        } catch (error) {
+            console.error("Failed to fetch Pokemon details", error);
         }
-        const pokemonDetailsPromises = pokemonList.results.map(
-            async (pokemon) => {
-                let pokeName = pokemon.name;
-                let pokeUrl = pokemon.url;
-
-                const pkmn = await getPokemonDetails(pokeName, pokeUrl);
-                return pkmn;
-            }
-        );
-        pokemonDetailsList = await Promise.all(pokemonDetailsPromises);
-        console.log("data from fetch", pokemonDetailsList);
-        sessionStorage.setItem(
-            "pokemonDetails",
-            JSON.stringify(pokemonDetailsList)
-        );
     }
     return pokemonDetailsList;
 }
