@@ -9,74 +9,44 @@ interface IAbilities {
     url: string;
 }
 
-async function filterAbilityData() {
+async function fetchAbilityDetails(ability: { name: string; url: string }) {
+    const response = await axios.get(ability.url);
+    const data = await response.data;
+    return {
+        name: ability.name.charAt(0).toUpperCase() + ability.name.slice(1),
+        attackPower: data.power !== null ? data.power : 50,
+        mpCost: data.pp,
+        type: data.type.name,
+        url: ability.url,
+    };
+}
+
+async function getAbilityDetails() {
     const abilityList = await getAbilityList();
-    const filteredAbilities: IAbilities[] = [];
-
-    try {
-        if (abilityList) {
-            abilityList.results.map(async (ability) => {
-                const response = await axios.get(ability.url);
-                const data = await response.data;
-                filteredAbilities.push({
-                    name: ability.name,
-                    attackPower: data.power !== null ? data.power : 50,
-                    mpCost: data.pp,
-                    type: data.type.name,
-                    url: ability.url,
-                });
-            });
-            console.log(filteredAbilities);
-            return filteredAbilities;
-        }
-    } catch (error) {
-        console.error(error);
+    if (!abilityList) {
+        throw new Error("Failed to fetch ability list");
     }
+    const abilitiesPromises = abilityList.results.map(fetchAbilityDetails);
+    return await Promise.all(abilitiesPromises);
 }
-export default async function getAbilityDetails() {
-    const abilities = await filterAbilityData();
+
+export default async function getAbility() {
+    let abilityDetailsList: IAbilities[] | undefined;
+    const sessionStorageAbilityList: string | null =
+        sessionStorage.getItem("abilityDetailsList");
+
+    if (sessionStorageAbilityList !== null) {
+        abilityDetailsList = JSON.parse(sessionStorageAbilityList);
+    } else {
+        try {
+            abilityDetailsList = await getAbilityDetails();
+            sessionStorage.setItem(
+                "abilityDetailsList",
+                JSON.stringify(abilityDetailsList)
+            );
+        } catch (error) {
+            console.error("Failed to fetch ability details", error);
+        }
+    }
+    return abilityDetailsList;
 }
-
-///////////////////////////////////////////////////////////////
-// works but takes ages. probably more efficient version above
-// export default async function filterAbilities() {
-//     const abilityList = await getAbilityList();
-//     const filteredAbilities: IAbilities[] = [];
-
-//     try {
-//         if (abilityList) {
-//             const abilityPromises = abilityList.results.map(async (ability) => {
-//                 const response = await axios.get(ability.url);
-//                 const data = await response.data;
-//                 if (
-//                     data.generation.name === "generation-i" &&
-//                     data.meta.category.name === "damage"
-//                 ) {
-//                     return {
-//                         name: ability.name,
-//                         attackPower: data.power,
-//                         mpCost: data.pp / 2,
-//                         type: data.meta.category.name,
-//                         url: ability.url,
-//                     };
-//                 }
-//             });
-
-//             const abilities = await Promise.all(abilityPromises);
-//             for (const ability of abilities) {
-//                 if (ability) {
-//                     filteredAbilities.push(ability);
-//                 }
-//             }
-//         }
-//         console.log(filteredAbilities);
-
-//         // filteredAbilities.map((ability) => {
-//         //     console.log(`"${ability.name}"`);
-//         // });
-
-//         return filteredAbilities;
-//     } catch (error) {
-//         console.error(error);
-//     }
-// }
