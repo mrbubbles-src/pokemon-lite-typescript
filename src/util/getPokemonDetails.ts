@@ -6,9 +6,11 @@ interface IPkmnAttributes {
     type: string;
 }
 interface IPokemon {
+    id: number;
     name: string;
     img: string;
     attributes: IPkmnAttributes;
+    url: string;
 }
 
 async function getPokemonDetails(
@@ -26,9 +28,11 @@ async function getPokemonDetails(
             type: data.types[0].type.name,
         };
         const pokemon: IPokemon = {
+            id: data.id,
             name: pokemonName,
             img: data.sprites.front_default,
             attributes: { ...pkmnAttributes },
+            url: pkmnUrl,
         };
         return pokemon;
     } catch (error) {
@@ -36,8 +40,6 @@ async function getPokemonDetails(
     }
     return undefined;
 }
-// import getAbilityList from "./util/getAbilityList";
-
 export default async function getPokemon() {
     let pokemonDetailsList: ({} | undefined)[];
     const sessionStoragePkmnList: string | null =
